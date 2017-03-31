@@ -39,27 +39,28 @@ def publish_vcenter(builder):
     pimage = PublishImageVSphere()
 
     # doing field verification
-    if not "datastore" in builder:
-        printer.out("datastore in vcenter builder not found", printer.ERROR)
-        return
+
     if not "datacenterName" in builder:
         printer.out("datacenterName in vcenter builder not found", printer.ERROR)
         return
-    if not "clusterName" in builder:
-        printer.out("clusterName in vcenter builder not found", printer.ERROR)
-        return
+
     if not "displayName" in builder:
         printer.out("displayName in vcenter builder not found", printer.ERROR)
         return
-    if not "network" in builder:
-        printer.out("network in vcenter builder not found", printer.ERROR)
+
+    if not "esxHost" in builder:
+        printer.out("esxHost in vcenter builder not found", printer.ERROR)
         return
 
-    pimage.datastore = builder["datastore"]
+    if "datastore" in builder:
+        pimage.datastore = builder["datastore"]
+
+    if "network" in builder:
+        pimage.network = builder["network"]
+
     pimage.datacenterName = builder["datacenterName"]
-    pimage.clusterName = builder["clusterName"]
     pimage.displayName = builder["displayName"]
-    pimage.network = builder["network"]
+    pimage.esxHost = builder["esxHost"]
     return pimage
 
 
