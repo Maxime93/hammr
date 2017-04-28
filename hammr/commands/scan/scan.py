@@ -75,7 +75,7 @@ class Scan(Cmd, CoreGlobal):
         mandatory.add_argument('--ip', dest='ip', required=True,
                                help="the IP address or fully qualified hostname of the running system")
         mandatory.add_argument('--scan-login', dest='login', required=True, help="the root user name (normally root)")
-        mandatory.add_argument('--name', dest='name', required=True,
+        mandatory.add_argument('--name', dest='name', required=True, nargs='+',
                                help="the scan name to use when creating the scan meta-data")
         optional = doParser.add_argument_group("optional arguments")
         optional.add_argument('--scan-port', dest='port', required=False,
@@ -94,6 +94,7 @@ class Scan(Cmd, CoreGlobal):
             # add arguments
             doParser = self.arg_run()
             doArgs = doParser.parse_args(shlex.split(args))
+            doArgs.name = '\ '.join(doArgs.name)
 
             #if the help command is called, parse_args returns None object
             if not doArgs:
