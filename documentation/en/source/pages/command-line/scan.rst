@@ -35,6 +35,14 @@ Deletes an existing scan. The options are:
 	* ``--scantype`` (mandatory): the type to be deleted. Can be one of: instance, scan, or all. When you set the type to ``instance``, the instance and all scans linked to it will be deleted unless using the ``scansonly`` flag. When you specify the type as ``scan`` only the scan with the ID to specify will be deleted. If you set the type to ``all``, all the instances and scans on your UForge will be deleted (regardeless of the ``id`` you set).
 	* ``--scansonly`` (optional): this flag can be used when the scan type is set to ``instance``. In this case, only the scans linked to the specified instance will be deleted (not the instance itself).
 
+`cancel`` sub-command
+~~~~~~~~~~~~~~~~~~~~~~
+
+Cancels an ongoing scan (Cannot cancel a completed scan). The options are:
+
+	* ``--id`` (mandatory): the ID of the instance or scan to cancel
+	* ``--scantype`` (optionnal): the type to be canceled (By default set to ``scan``). Can be one of: instance or scan. When you set the type to ``instance``, all scans linked to the instance that are ongoing will be canceled. When you specify the type as ``scan`` only the scan with the ID to specify will be canceled.
+
 ``import`` sub-command
 ~~~~~~~~~~~~~~~~~~~~~~
 
