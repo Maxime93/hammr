@@ -33,6 +33,7 @@ from hammr.utils import *
 from uforge.objects.uforge import *
 from hammr.utils.hammr_utils import *
 
+import pprint
 
 class Scan(Cmd, CoreGlobal):
     """List or delete existing scan images, build an image from a scan, launch the scan of a live system, or import a scan as an image"""
@@ -53,6 +54,22 @@ class Scan(Cmd, CoreGlobal):
             printer.out("Getting scans for [" + self.login + "] ...")
             myScannedInstances = self.api.Users(self.login).Scannedinstances.Getall(Includescans="true")
             myScannedInstances = myScannedInstances.scannedInstances.scannedInstance
+            # for myScannedInstance in myScannedInstances:
+                # print dir(myScannedInstances)
+                # print myScannedInstance.dbId
+                # for scan in myScannedInstance.scans.scan:
+                #     try:
+                #         print '############################'
+                #         print scan.dbId
+                #         # pprint.pprint(dir(scan.status))
+                #         print '############################'
+                #         print scan.status.cancelled
+                #         print scan.status.complete
+                #         # print dir(scan.images.value)
+                #         # print scan.images.value.get()
+                #         print
+                #     except AttributeError:
+                #         pass
             if myScannedInstances is None or len(myScannedInstances) == 0:
                 printer.out("No scans available")
                 return
@@ -410,6 +427,95 @@ class Scan(Cmd, CoreGlobal):
 
     def help_import(self):
         doParser = self.arg_import()
+        doParser.print_help()
+
+    def arg_cancel(self):
+        doParser = ArgumentParser(prog=self.cmd_name + " cancel", add_help=True, description="Cancels an ongoing scan")
+        mandatory = doParser.add_argument_group("mandatroy arguments")
+        mandatory.add_argument('--id', dest='id', required=True, help="the ID of the instance or scan to delete")
+        optional = doParser.add_argument_group(("optional argument"))
+        optional.add_argument('--scantype', dest='scantype', help="the scan type values are [instance|scan] (default is scan)")
+        return doParser
+
+    def do_cancel(self, args):
+        try:
+            doParser = self.arg_cancel()
+            try:
+                doArgs = doParser.parse_args(shlex.split(args))
+            except SystemExit as e:
+                return
+            # get the correct scan instance
+            searchedScanType = 'scan'
+            word = 'ongoing scan'
+            if doArgs.scantype:
+                if doArgs.scantype not in ['instance','scan']:
+                    printer.out("\nIncorrect value for \'--scantype\' argument.\n"
+                                "Should be \'scan\' or \'instance\'.\n")
+                    self.help_cancel()
+                    return
+                searchedScanType = doArgs.scantype
+                if searchedScanType == 'instance':
+                    word = 'scan instance'
+            extraInfo = "\nRetrieving "+word+" with id [" + doArgs.id + "] ..."
+            printer.out(extraInfo)
+            myScannedInstances = self.api.Users(self.login).Scannedinstances.Getall(Includescans="true")
+            myScannedInstances = myScannedInstances.scannedInstances.scannedInstance
+            for myScannedInstance in myScannedInstances:
+                if searchedScanType == 'instance':
+                    if str(doArgs.id) == str(myScannedInstance.dbId):
+                        ongoing = False
+                        cancel_id = []
+                        for scan in myScannedInstance.scans.scan:
+                            if scan.status.complete == False:
+                                ongoing = True
+                                cancel_id.append(scan.dbId)
+                        if not ongoing and not cancel_id:
+                            print scan_utils.scan_table([myScannedInstance]).draw() + "\n"
+                            printer.out("\nThis Scan instance has no ongoing scans.\n"
+                                        "Enter \'scan delete --scantype instance --id "+str(doArgs.id)+"\' to delete this instance.\n")
+                            return
+                        print scan_utils.scan_table([myScannedInstance]).draw() + "\n"
+                        plural = ""
+                        if len(cancel_id) > 1: plural = "s"
+                        printer.out("\nThis Scan instance has "+str(len(cancel_id))+" ongoing scan"+plural+".")
+                        cancel_id_print = map(int,cancel_id)
+                        if generics_utils.query_yes_no("Do you really want to cancel scan"+plural+" with id"+plural+" " + str(cancel_id_print)):
+                            printer.out("Please wait...")
+                            for id in cancel_id:
+                                self.api.Users(self.login) \
+                                    .Scannedinstances(myScannedInstance.dbId) \
+                                    .Scans(id) \
+                                    .Status.Cancel()
+                                printer.out("Scan "+str(id)+" Canceled", printer.OK)
+
+                if searchedScanType == 'scan':
+                    for scan in myScannedInstance.scans.scan:
+                        if str(scan.dbId) == doArgs.id:
+                            if scan.status.complete:
+                                printer.out("\nScan "+str(scan.dbId)+" is complete.\n"
+                                                                   "You can only cancel an ongoing scan.\n"
+                                                                   "Use \'delete\' command to remove scan "+str(scan.dbId)+" named \'"+str(scan.name)+"\'\n")
+                                return
+                            print scan_utils.scan_table([myScannedInstance], scan).draw() + "\n"
+
+                            if generics_utils.query_yes_no("Do you really want to delete scan with id " + str(doArgs.id)):
+                                printer.out("Please wait...")
+                                self.api.Users(self.login)\
+                                    .Scannedinstances(myScannedInstance.dbId)\
+                                    .Scans(doArgs.id)\
+                                    .Status.Cancel()
+                                printer.out("Scan Canceled", printer.OK)
+                            return
+        except ArgumentParserError as e:
+            printer.out("ERROR: In Arguments: " + str(e), printer.ERROR)
+            self.help_cancel()
+        except Exception as e:
+            return handle_uforge_exception(e)
+
+        return True
+
+    def help_cancel(self):
+        doParser = self.arg_cancel()
         doParser.print_help()
 
     def arg_delete(self):
