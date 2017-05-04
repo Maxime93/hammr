@@ -33,8 +33,6 @@ from hammr.utils import *
 from uforge.objects.uforge import *
 from hammr.utils.hammr_utils import *
 
-import pprint
-
 class Scan(Cmd, CoreGlobal):
     """List or delete existing scan images, build an image from a scan, launch the scan of a live system, or import a scan as an image"""
 
@@ -54,22 +52,6 @@ class Scan(Cmd, CoreGlobal):
             printer.out("Getting scans for [" + self.login + "] ...")
             myScannedInstances = self.api.Users(self.login).Scannedinstances.Getall(Includescans="true")
             myScannedInstances = myScannedInstances.scannedInstances.scannedInstance
-            # for myScannedInstance in myScannedInstances:
-                # print dir(myScannedInstances)
-                # print myScannedInstance.dbId
-                # for scan in myScannedInstance.scans.scan:
-                #     try:
-                #         print '############################'
-                #         print scan.dbId
-                #         # pprint.pprint(dir(scan.status))
-                #         print '############################'
-                #         print scan.status.cancelled
-                #         print scan.status.complete
-                #         # print dir(scan.images.value)
-                #         # print scan.images.value.get()
-                #         print
-                #     except AttributeError:
-                #         pass
             if myScannedInstances is None or len(myScannedInstances) == 0:
                 printer.out("No scans available")
                 return
