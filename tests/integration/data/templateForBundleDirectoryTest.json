@@ -25,17 +25,18 @@
         "name": "B",
         "version": "6.0",
         "destination": "/tmp/myBundle",
+        "restrictionRule": "Distribution#name=CentOS && Distribution#version=7 && Distribution#arch=x86_64",
         "files": [
           {
             "name": "directoryTest",
-            "source": "data/directoryTest",
+            "source": "tests/integration/data/directoryTest",
             "destination": "/usr/local/myBundle",
-            "extract": true
+            "files": []
           }
         ],
         "license": {
           "name": "license.html",
-          "source": "data/directoryTest/file1of3.txt"
+          "source": "tests/integration/data/directoryTest/file1of3.txt"
         }
       }
     ]

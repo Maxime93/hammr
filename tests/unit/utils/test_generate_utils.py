@@ -1,4 +1,4 @@
-# Copyright 2007-2017 UShareSoft SAS, All rights reserved
+# Copyright (c) 2007-2018 UShareSoft, All rights reserved
 #
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -43,6 +43,60 @@ class TestGenerateK5(TestCase):
         self.assertFalse(image.compress)
         self.assertEquals(intall_profile_given, install_profile)
 
+
+class TestGeneratePXE(TestCase):
+    def test_generate_pxe_should_return_uncompressed_image_given_compressed_image(self):
+        # given
+        image_given = CompressedImage()
+        intall_profile_given = MockObject()
+
+        # when
+        image, install_profile = generate_pxe(image_given, WhateverObject(), intall_profile_given, None, None)
+
+        # then
+        self.assertFalse(image.compress)
+        self.assertEquals(intall_profile_given, install_profile)
+
+
+    def test_generate_pxe_should_return_uncompressed_image_given_uncompressed_image(self):
+        # given
+        image_given = UncompressedImage()
+        intall_profile_given = MockObject()
+
+        # when
+        image, install_profile = generate_pxe(image_given, WhateverObject(), intall_profile_given,
+                                                 None, None)
+
+        # then
+        self.assertFalse(image.compress)
+        self.assertEquals(intall_profile_given, install_profile)
+
+
+class TestGenerateOracle(TestCase):
+    def test_generate_oracleraw_should_return_compressed_image_given_compressed_image(self):
+        # given
+        image_given = CompressedImage()
+        install_profile_given = MockObject()
+
+        # when
+        image, install_profile = generate_oracleraw(image_given, WhateverObject(), install_profile_given, WhateverObject(), WhateverObject())
+
+        # then
+        self.assertTrue(image.compress)
+        self.assertEquals(install_profile_given, install_profile)
+
+    def test_generate_oracleraw_should_return_compressed_image_given_uncompressed_image(self):
+        # given
+        image_given = UncompressedImage()
+        install_profile_given = MockObject()
+
+        # when
+        image, install_profile = generate_oracleraw(image_given, WhateverObject(), install_profile_given,
+                                                 WhateverObject(), WhateverObject())
+
+        # then
+        self.assertTrue(image.compress)
+        self.assertEquals(install_profile_given, install_profile)
 
 class CompressedImage:
     compress = True

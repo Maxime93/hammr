@@ -1,4 +1,4 @@
-.. Copyright (c) 2007-2016 UShareSoft, All rights reserved
+.. Copyright (c) 2007-2018 UShareSoft, All rights reserved
 
 .. _command-line:
 
@@ -29,6 +29,7 @@ Below provides a list of the available ``commands``:
 
    account
    bundle
+   deploy
    format
    platform
    image

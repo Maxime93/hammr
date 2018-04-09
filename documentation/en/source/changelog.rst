@@ -1,7 +1,102 @@
-.. Copyright (c) 2007-2016 UShareSoft, All rights reserved
+.. Copyright (c) 2007-2018 UShareSoft, All rights reserved
 
 Changelog
 =========
+
+hammr 3.8.3 (2018-04-16)
+------------------------
+
+Evolutions:
+
+* hammr image publish now works for images coming from scans
+* Remove End-Of-Life Microsoft Azure Classic
+* Add support for UForge API Keys
+
+hammr 3.8.2 (2018-03-05)
+------------------------
+
+Evolutions:
+
+* Compatibility with UForge AppCenter 3.8.fp2-1 only
+
+Bug fixes:
+
+* Fix image publish to Outscale
+* Fix image publish to Cloudstack
+
+hammr 3.8.1 (2018-01-22)
+------------------------
+
+Evolutions:
+
+* Compatibility with UForge AppCenter 3.8.fp1-1 only
+* Compatibility with Python 2.7 only
+* Add Oracle Cloud publish support
+* Add info for using supervisor mode in Hammr
+
+Bug fixes:
+
+* Fix OpenStack doc to fit the retrieval behaviour (use names instead of ids)
+* Remove hardware info for Fujitsu K5 builder section
+* Allowed .yaml file extension
+* Unnecessary traceback displayed when two files with the same source path in the bundles section error occur
+* Fix image list for empty list
+* Set timeout limit to 300 seconds when retrieving from OpenStack
+
+hammr 3.7.8 (2017-10-16)
+--------------------------
+
+Evolutions:
+
+* Microsoft Azure connector has been updated. Previously with UForge the machine image was publish as a "vhd" blob file in the Azure cloud Account. Now an image will be accessible in the cloud console from this blob file. In order to support this additional information must be entered in ``Credentials`` for Microsoft Azure ARM connector.
+* Users can deploy instances from published machine images to Microsoft Azure ARM.
+* Improve output display of deploy command.
+
+hammr 3.7.7 (2017-09-04)
+--------------------------
+
+Evolutions:
+
+* Compatibility with UForge AppCenter 3.7.fp7-1 only
+* Users can deploy instances from published machine images to Amazon AWS and OpenStack.
+* Images can be created in PXE format for CentOS
+
+hammr 3.7.6 (2017-07-25)
+--------------------------
+
+Evolutions:
+
+* Compatibility with UForge AppCenter 3.7.fp6-1 only
+
+hammr 3.7.5 (2017-06-12)
+--------------------------
+
+Evolutions:
+
+* Modification of VMware VCenter image publication
+* Support restrictions on Software Bundle
+
+Bug fixes:
+
+* Version check when using hammr commands without interactive mode
+* A scan name including a space cannot be specified with hammr scan run
+* hammr image list displays 0B for images generated from a scan
+
+Compatibility with UForge AppCenter 3.7.fp5-1 only
+
+hammr 3.7.4 (2017-28-04)
+--------------------------
+
+Evolutions:
+
+* Compatibility with UForge AppCenter 3.7.fp4-1 only
+* Add overlay argument to scan run command to run a scan with overlay
+
+Bug fixes:
+
+* Flag acceptAutoSigned not working for image download
+* Name for the builder account can now be read from an external file
+* Fixes on documentation
 
 hammr 3.7.3 (2017-21-03)
 --------------------------

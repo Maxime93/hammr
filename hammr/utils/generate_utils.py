@@ -1,4 +1,4 @@
-# Copyright 2007-2015 UShareSoft SAS, All rights reserved
+# Copyright (c) 2007-2018 UShareSoft, All rights reserved
 #
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -205,9 +205,17 @@ def generate_k5vmdk(image, builder, installProfile, api, login):
     image.compress = False
     return image, installProfile
 
+def generate_oracleraw(image, builder, installProfile, api, login):
+    image.compress = True
+    return image, installProfile
+
 ##--------------------- Physical Formats
 def generate_iso(image, builder, installProfile, api=None, login=None):
     image.compress = True
+    return image, installProfile
+
+def generate_pxe(image, builder, installProfile, api=None, login=None):
+    image.compress = False
     return image, installProfile
 
 

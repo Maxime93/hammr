@@ -1,4 +1,4 @@
-.. Copyright (c) 2007-2016 UShareSoft, All rights reserved
+.. Copyright (c) 2007-2018 UShareSoft, All rights reserved
 
 .. _template-builders:
 
@@ -35,6 +35,7 @@ Cloud Targets
    builders-k5
    builders-nimbula
    builders-openstack
+   builders-oracle-cloud
    builders-outscale
    builders-suse-cloud
    builders-vcd
@@ -74,3 +75,4 @@ Physical Targets
    :titlesonly:
 
    builders-iso
+   builders-pxe

@@ -1,4 +1,4 @@
-.. Copyright (c) 2007-2016 UShareSoft, All rights reserved
+.. Copyright (c) 2007-2018 UShareSoft, All rights reserved
 
 .. _command-line-image:
 
@@ -28,6 +28,15 @@ Cancels a machine image build or publish. The options are:
 Deletes a machine image or publish information. The options are:
 
 	* ``--id`` (mandatory): the ID of the machine image to delete
+
+``deploy`` sub-command
+~~~~~~~~~~~~~~~~~~~~~~
+
+Deploy an instance of a published image on the targeted cloud. The options are:
+
+        * ``--publish-id`` (mandatory): the ID of the published image to deploy
+        * ``--name`` (mandatory): the name of the image to deploy
+
 
 ``download`` sub-command
 ~~~~~~~~~~~~~~~~~~~~~~~~

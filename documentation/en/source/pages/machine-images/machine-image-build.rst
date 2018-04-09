@@ -1,4 +1,4 @@
-.. Copyright (c) 2007-2016 UShareSoft, All rights reserved
+.. Copyright (c) 2007-2018 UShareSoft, All rights reserved
 
 .. _machine-image-build:
 
@@ -59,6 +59,8 @@ The following tables list if the machine image will be compressed by default or 
 | Outscale         |                     |     X                 |
 +------------------+---------------------+-----------------------+
 | Fujitsu K5       |                     |     X                 |
++------------------+---------------------+-----------------------+
+| Oracle Cloud     |    X                |                       |
 +------------------+---------------------+-----------------------+
 
 

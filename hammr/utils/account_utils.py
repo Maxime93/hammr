@@ -1,4 +1,4 @@
-# Copyright 2007-2015 UShareSoft SAS, All rights reserved
+# Copyright (c) 2007-2018 UShareSoft, All rights reserved
 #
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -157,66 +157,31 @@ def aws(account):
 
 
 def azure(account):
-    if not "publishsettings" in account:
-        printer.out("Azure Resource Manager account")
-        return azure_arm(account)
-    else:
-        printer.out("Azure classic account")
-        return azure_classic(account)
-
-
-def azure_arm(account):
-    myCredAccount = CredAccountAzureResourceManager()
-    # doing field verification
-    if not "name" in account:
-        printer.out("name for azure account not found", printer.ERROR)
-        return
-    if not "accountName" in account:
-        printer.out("Storgae account name not found", printer.ERROR)
-        return
-    if not "accountKey" in account:
-        printer.out("Storgae account key not found", printer.ERROR)
-        return
-
-    myCredAccount.name = account["name"]
-    myCredAccount.accountName = account["accountName"]
-    myCredAccount.accountKey = account["accountKey"]
-
-    return myCredAccount
-
-
-def azure_classic(account):
     myCredAccount = CredAccountAzure()
     # doing field verification
     if not "name" in account:
         printer.out("name for azure account not found", printer.ERROR)
         return
-    if not "publishsettings" in account:
-        printer.out("publishsettings in azure account not found", printer.ERROR)
+    if not "tenantId" in account:
+        printer.out("no tenant id found", printer.ERROR)
+        return
+    if not "subscriptionId" in account:
+        printer.out("no subscription id found", printer.ERROR)
+        return
+    if not "applicationId" in account:
+        printer.out("no application id found", printer.ERROR)
+        return
+    if not "applicationKey" in account:
+        printer.out("no application key found", printer.ERROR)
         return
 
     myCredAccount.name = account["name"]
-    myCredAccount.publishsettings = account["publishsettings"]
-
-    myCredAccount.certificates = pyxb.BIND()
-    # A hack to avoid a toDOM, toXML bug
-    myCredAccount.certificates._ExpandedName = pyxb.namespace.ExpandedName(Namespace, 'Certificates')
-
-    try:
-        cert = certificate()
-        with open(account["publishsettings"], "r") as myfile:
-            cert.content_ = myfile.read()
-        cert.type = "azurePublishSettings"
-        cert.type._ExpandedName = pyxb.namespace.ExpandedName(Namespace, 'string')
-        cert.name = ntpath.basename(account["publishsettings"])
-        myCredAccount.certificates.append(cert)
-
-    except IOError as e:
-        printer.out("File error: " + str(e), printer.ERROR)
-        return
+    myCredAccount.tenantId = account["tenantId"]
+    myCredAccount.subscriptionId = account["subscriptionId"]
+    myCredAccount.applicationId = account["applicationId"]
+    myCredAccount.applicationKey = account["applicationKey"]
 
     return myCredAccount
-
 
 def eucalyptus(account):
     myCredAccount = CredAccountEws()
@@ -518,6 +483,28 @@ def docker(account):
 
     myCredAccount.name = account["name"]
     myCredAccount.endpointUrl = account["endpointUrl"]
+    myCredAccount.login = account["login"]
+    myCredAccount.password = account["password"]
+    return myCredAccount
+
+def oracle(account):
+    myCredAccount = CredAccountOracle()
+
+    if not "name" in account:
+        printer.out("name for Oracle account is missing", printer.ERROR)
+        return
+    if not "login" in account:
+        printer.out("login for Oracle account is missing", printer.ERROR)
+        return
+    if not "password" in account:
+        printer.out("password for Oracle account is missing", printer.ERROR)
+        return
+    if not "domainName" in account:
+        printer.out("domain name for Oracle account is missing", printer.ERROR)
+        return
+
+    myCredAccount.name = account["name"]
+    myCredAccount.domainName = account["domainName"]
     myCredAccount.login = account["login"]
     myCredAccount.password = account["password"]
     return myCredAccount
