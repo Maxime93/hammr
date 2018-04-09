@@ -1,4 +1,4 @@
-# Copyright 2007-2015 UShareSoft SAS, All rights reserved
+# Copyright (c) 2007-2018 UShareSoft, All rights reserved
 #
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -25,6 +25,7 @@ import pyxb
 
 from uforge.objects.uforge import *
 import ussclicore.utils.download_utils
+from ussclicore.argumentParser import ArgumentParserError
 from ussclicore.utils import printer
 from ussclicore.utils import generics_utils
 from hammr.utils.bundle_utils import *
@@ -277,3 +278,13 @@ def extract_appliance_id(image_uri):
         return int(match.group(1))
     else:
         return None
+
+
+def retrieve_template_from_file(file):
+    file = generics_utils.get_file(file)
+    if not file:
+        raise ArgumentParserError("Wrong file argument")
+    template = validate(file)
+    if not template:
+        raise ValueError("Could not extract information from file")
+    return template
